@@ -150,19 +150,75 @@ rotas.get('/segredo', (req, res) => {
 });
 
 rotas.get('/nome/:nome', async (req, res) => {
-    const nome = req.query;
+    const nome = req.params.nome;
     try {
         await knex('usuarios').insert({ nome: nome });
         const usuarios = await knex('usuarios');
-        return res.status(200).json({
-            mensagem: `Obrigada por testarem se meu deploy deu certo.
-        ${usuarios}`
+
+        let tabelaHTML = `
+        <html>
+            <head>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #222;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        margin: 0;
+                        color: #ffffff;
+                        text-align: center;
+                    }
+                    h2 {
+                        color: #ffffff;
+                    }
+                    table {
+                        margin-top: 20px; /* Adicione um espaço entre o h2 e a tabela */
+                    }
+                    th, td {
+                        padding: 8px;
+                        text-align: center;
+                    }
+                    th {
+                        background-color: #333;
+                    }
+                    tr:nth-child(even) {
+                        background-color: #444;
+                    }
+                </style>
+            </head>
+            <body>
+                <h2>Obrigada por testarem se meu deploy funcionou <3</h2>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                    </tr>
+            </body>
+        </html>
+        `;
+
+        usuarios.forEach(usuario => {
+            tabelaHTML += `
+            <tr>
+                <td>${usuario.id}</td>
+                <td>${usuario.nome}</td>
+            </tr>
+            `;
         });
+
+        tabelaHTML += `
+        </table>
+        `;
+
+        return res.status(200).send(tabelaHTML);
+
+
     } catch (error) {
         return res.status(500).json(error.message);
     }
-
-
 });
 
 

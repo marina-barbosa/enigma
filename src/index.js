@@ -1,7 +1,5 @@
 
-require('dotenv').config({
-    path: './src',
-});
+require('dotenv').config();
 
 const express = require('express');
 const rotas = require('./rotas');
