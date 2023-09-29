@@ -1,6 +1,5 @@
 const express = require('express');
-const enigmas = require('./controladores/enigmas');
-
+const knex = require('./conexao.js');
 const rotas = express();
 
 // cadastro de usuario
